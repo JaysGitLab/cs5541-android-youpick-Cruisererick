@@ -1,5 +1,6 @@
 package com.example.eric.locatr;
 
+import android.location.Location;
 import android.net.Uri;
 import android.util.Log;
 
@@ -86,12 +87,25 @@ public class FlickrFetchr {
         return items;
     }
 
+    public List<GalleryItem> searchPhotos (Location location){
+        String url = buildUrl(location);
+        return downloadGalleryItems(url);
+    }
+
     private String buildUrl(String method, String query){
         Uri.Builder uriBuilder = ENDPOINT.buildUpon().appendQueryParameter("method",method);
         if (method.equals(SEARCH_METHOD)){
             uriBuilder.appendQueryParameter("text",query);
         }
         return uriBuilder.build().toString();
+    }
+
+    private String buildUrl(Location location){
+        return ENDPOINT.buildUpon()
+                .appendQueryParameter("method",SEARCH_METHOD)
+                .appendQueryParameter("lat",""+location.getLatitude())
+                .appendQueryParameter("lon",""+location.getLongitude())
+                .build().toString();
     }
 
     private void parseItems(List<GalleryItem> items,JSONObject jsonBody)
