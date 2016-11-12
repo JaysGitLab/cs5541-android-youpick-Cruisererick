@@ -31,7 +31,7 @@ public class FlickrFetchr {
             .appendQueryParameter("api_key", API_KEY)
             .appendQueryParameter("format", "json")
             .appendQueryParameter("nojsoncallback", "1")
-            .appendQueryParameter("extras", "url_s")
+            .appendQueryParameter("extras", "url_s,geo")
             .build();
 
     public byte[] getUrlBytes(String urlSpec) throws IOException{
@@ -123,6 +123,8 @@ public class FlickrFetchr {
                 continue;
             }
             item.setmUrl(photoJsonObject.getString("url_s"));
+            item.setLat(photoJsonObject.getDouble("latitude"));
+            item.setLon(photoJsonObject.getDouble("longitude"));
             items.add(item);
         }
     }
